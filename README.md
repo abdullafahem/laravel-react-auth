@@ -12,6 +12,5 @@
 <hr><p>In the .env file in the backend project, you should use your .env file, not the example one.
 After that just run <em>php artisan serve</em>.</p>
 <p>In the frontend project, you should run firstly <em>npm install</em>.
-After just run <em>npm run dev</em>.</p><h2>Usage</h2>
-<hr><p>Use for <em>ONLY</em> education purposes.</p><h2>Contact</h2>
+After just run <em>npm run dev</em>.
 <hr><p><span style="margin-right: 30px;"></span><a href="https://www.linkedin.com/in/abdulla-fahem/"><img style="width: 10%;" target="_blank" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg"></a><span style="margin-right: 30px;"></span><a href="https://github.com/abdullafahem"><img style="width: 10%;" target="_blank" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"></a></p>
