@@ -5,10 +5,14 @@ import axios from '../api/axios';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState([]);
   const navigate = useNavigate();
+
+  const csrf = () => axios.get('/sanctum/csrf-cookie');
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    await csrf();
     try {
       await axios.post('/login', {
         email,
@@ -17,8 +21,10 @@ const Login = () => {
       setEmail('');
       setPassword('');
       navigate('/');
-    } catch (error) {
-      console.log(error);
+    } catch (e) {
+      if (e.response.status === 422) {
+        setErrors(e.response.data.errors);
+      }
     }
   };
 
@@ -64,9 +70,13 @@ const Login = () => {
                     focus-visible:shadow-none
                   '
                   />
-                  <div className='flex'>
-                    <span className='text-red-400 text-sm m-2 p-2'>error</span>
-                  </div>
+                  {errors.email && (
+                    <div className='flex'>
+                      <span className='text-red-400 text-sm m-2 p-2'>
+                        {errors.email[0]}
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div className='mb-4'>
                   <input
@@ -89,9 +99,13 @@ const Login = () => {
                     focus-visible:shadow-none
                   '
                   />
-                  <div className='flex'>
-                    <span className='text-red-400 text-sm m-2 p-2'>error</span>
-                  </div>
+                  {errors.password && (
+                    <div className='flex'>
+                      <span className='text-red-400 text-sm m-2 p-2'>
+                        {errors.password[0]}
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div className='mb-10'>
                   <button

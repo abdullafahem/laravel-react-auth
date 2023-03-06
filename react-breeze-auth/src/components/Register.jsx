@@ -1,7 +1,38 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from '../api/axios';
 
 const Register = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [password_confirmation, setPasswordConfirmation] = useState('');
+  const [errors, setErrors] = useState([]);
+  const navigate = useNavigate();
+
+  const csrf = () => axios.get('/sanctum/csrf-cookie');
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    await csrf();
+    try {
+      await axios.post('/register', {
+        name,
+        email,
+        password,
+        password_confirmation,
+      });
+      setName('');
+      setEmail('');
+      setPassword('');
+      setPasswordConfirmation('');
+      navigate('/');
+    } catch (error) {
+      if (error.response.status === 422) {
+        setErrors(error.response.data.errors);
+      }
+    }
+  };
   return (
     <section className='bg-[#F4F7FF] py-20 lg:py-[120px]'>
       <div className='container mx-auto'>
@@ -22,11 +53,13 @@ const Register = () => {
               md:px-[60px]
             '>
               <div className='mb-10 text-center md:mb-16'>FahemDev</div>
-              <form>
+              <form onSubmit={handleRegister}>
                 <div className='mb-4'>
                   <input
                     type='text'
                     placeholder='Name'
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     className='
                     bordder-[#E9EDF4]
                     w-full
@@ -42,14 +75,20 @@ const Register = () => {
                     focus-visible:shadow-none
                   '
                   />
-                  <div className='flex'>
-                    <span className='text-red-400 text-sm m-2 p-2'>error</span>
-                  </div>
+                  {errors.name && (
+                    <div className='flex'>
+                      <span className='text-red-400 text-sm m-2 p-2'>
+                        {errors.name[0]}
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div className='mb-4'>
                   <input
                     type='email'
                     placeholder='Email'
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className='
                     bordder-[#E9EDF4]
                     w-full
@@ -65,14 +104,20 @@ const Register = () => {
                     focus-visible:shadow-none
                   '
                   />
-                  <div className='flex'>
-                    <span className='text-red-400 text-sm m-2 p-2'>error</span>
-                  </div>
+                  {errors.email && (
+                    <div className='flex'>
+                      <span className='text-red-400 text-sm m-2 p-2'>
+                        {errors.email[0]}
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div className='mb-4'>
                   <input
                     type='password'
                     placeholder='Password'
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className='
                     bordder-[#E9EDF4]
                     w-full
@@ -88,14 +133,20 @@ const Register = () => {
                     focus-visible:shadow-none
                   '
                   />
-                  <div className='flex'>
-                    <span className='text-red-400 text-sm m-2 p-2'>error</span>
-                  </div>
+                  {errors.password && (
+                    <div className='flex'>
+                      <span className='text-red-400 text-sm m-2 p-2'>
+                        {errors.password[0]}
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div className='mb-4'>
                   <input
                     type='password'
                     placeholder='Confirm Password'
+                    value={password_confirmation}
+                    onChange={(e) => setPasswordConfirmation(e.target.value)}
                     className='
                     bordder-[#E9EDF4]
                     w-full
@@ -111,9 +162,6 @@ const Register = () => {
                     focus-visible:shadow-none
                   '
                   />
-                  <div className='flex'>
-                    <span className='text-red-400 text-sm m-2 p-2'>error</span>
-                  </div>
                 </div>
                 <div className='mb-10'>
                   <button
