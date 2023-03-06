@@ -1,37 +1,17 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from '../api/axios';
+import { Link } from 'react-router-dom';
+import useAuthContext from '../context/AuthContext';
 
 const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [password_confirmation, setPasswordConfirmation] = useState('');
-  const [errors, setErrors] = useState([]);
-  const navigate = useNavigate();
-
-  const csrf = () => axios.get('/sanctum/csrf-cookie');
+  const { register, errors } = useAuthContext();
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    await csrf();
-    try {
-      await axios.post('/register', {
-        name,
-        email,
-        password,
-        password_confirmation,
-      });
-      setName('');
-      setEmail('');
-      setPassword('');
-      setPasswordConfirmation('');
-      navigate('/');
-    } catch (error) {
-      if (error.response.status === 422) {
-        setErrors(error.response.data.errors);
-      }
-    }
+    register({ name, email, password, password_confirmation });
   };
   return (
     <section className='bg-[#F4F7FF] py-20 lg:py-[120px]'>
