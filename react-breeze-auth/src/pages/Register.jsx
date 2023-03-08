@@ -2,16 +2,17 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import useAuthContext from '../context/AuthContext';
 
-const Login = () => {
+const Register = () => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login, errors } = useAuthContext();
+  const [password_confirmation, setPasswordConfirmation] = useState('');
+  const { register, errors } = useAuthContext();
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    login({ email, password });
+    register({ name, email, password, password_confirmation });
   };
-
   return (
     <section className='bg-[#F4F7FF] py-20 lg:py-[120px]'>
       <div className='container mx-auto'>
@@ -31,14 +32,45 @@ const Login = () => {
               sm:px-12
               md:px-[60px]
             '>
-              <div className='mb-10 text-center md:mb-16'>FahemDev</div>
-              <form onSubmit={handleLogin}>
+              <div className='mb-10 text-center md:mb-16 text-2xl'>
+                FahemDev
+              </div>
+              <form onSubmit={handleRegister}>
+                <div className='mb-4'>
+                  <input
+                    type='text'
+                    placeholder='Name'
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className='
+                    bordder-[#E9EDF4]
+                    w-full
+                    rounded-md
+                    border
+                    bg-[#FCFDFE]
+                    py-3
+                    px-5
+                    text-base text-body-color
+                    placeholder-[#ACB6BE]
+                    outline-none
+                    focus:border-primary
+                    focus-visible:shadow-none
+                  '
+                  />
+                  {errors.name && (
+                    <div className='flex'>
+                      <span className='text-red-400 text-sm m-2 p-2'>
+                        {errors.name[0]}
+                      </span>
+                    </div>
+                  )}
+                </div>
                 <div className='mb-4'>
                   <input
                     type='email'
+                    placeholder='Email'
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder='Email'
                     className='
                     bordder-[#E9EDF4]
                     w-full
@@ -65,9 +97,9 @@ const Login = () => {
                 <div className='mb-4'>
                   <input
                     type='password'
+                    placeholder='Password'
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder='Password'
                     className='
                     bordder-[#E9EDF4]
                     w-full
@@ -91,6 +123,28 @@ const Login = () => {
                     </div>
                   )}
                 </div>
+                <div className='mb-4'>
+                  <input
+                    type='password'
+                    placeholder='Confirm Password'
+                    value={password_confirmation}
+                    onChange={(e) => setPasswordConfirmation(e.target.value)}
+                    className='
+                    bordder-[#E9EDF4]
+                    w-full
+                    rounded-md
+                    border
+                    bg-[#FCFDFE]
+                    py-3
+                    px-5
+                    text-base text-body-color
+                    placeholder-[#ACB6BE]
+                    outline-none
+                    focus:border-primary
+                    focus-visible:shadow-none
+                  '
+                  />
+                </div>
                 <div className='mb-10'>
                   <button
                     type='submit'
@@ -103,26 +157,16 @@ const Login = () => {
                     rounded-md
                     text-white
                   '>
-                    Login
+                    Register
                   </button>
                 </div>
               </form>
-              <Link
-                to='/forgot-password'
-                className='
-                mb-2
-                inline-block
-                text-base text-[#adadad]
-                hover:text-primary hover:underline
-              '>
-                Forgot Password?
-              </Link>
               <p className='text-base text-[#adadad]'>
-                Not a member yet?{' '}
+                Already have an account?{' '}
                 <Link
-                  to='/register'
+                  to='/login'
                   className='text-indigo-500 hover:text-indigo-700 hover:underline'>
-                  Sign Up
+                  Sign In
                 </Link>
               </p>
             </div>
@@ -133,4 +177,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

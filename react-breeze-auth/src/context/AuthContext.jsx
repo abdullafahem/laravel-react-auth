@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import axios from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,6 +17,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async ({ ...data }) => {
     await csrf();
+    setErrors([]);
     try {
       await axios.post('/login', data);
       await getUser();
@@ -30,6 +31,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async ({ ...data }) => {
     await csrf();
+    setErrors([]);
     try {
       await axios.post('/register', data);
       await getUser();
@@ -47,6 +49,10 @@ export const AuthProvider = ({ children }) => {
       navigate('/login');
     });
   };
+
+  useEffect(() => {
+    if (!user) getUser();
+  }, []);
 
   return (
     <AuthContext.Provider
